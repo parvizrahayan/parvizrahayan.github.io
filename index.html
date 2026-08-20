@@ -116,6 +116,56 @@
   .cup-slot:hover .cup-name{background:var(--highlight);}
 
   @media (max-width:480px){ .tray-wrap{width:290px; height:290px;} }
+
+  /* ---------- PROMO BANNER: پارادایم آموزش ---------- */
+  .promo-banner{
+    position:relative; display:flex; align-items:center; justify-content:space-between;
+    gap:28px; background:#161513; border-radius:16px; padding:32px 34px;
+    overflow:hidden; text-decoration:none; isolation:isolate;
+    box-shadow:0 16px 40px -18px rgba(0,0,0,.35);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;
+    margin:0 0 40px;
+  }
+  .promo-banner:hover{ transform:translateY(-3px); box-shadow:0 22px 48px -16px rgba(217,99,26,.35); }
+  .promo-banner::before{
+    content:""; position:absolute; z-index:-1; width:340px; height:340px; border-radius:50%;
+    background:radial-gradient(circle, rgba(217,99,26,.5), transparent 70%);
+    top:-140px; left:-100px; filter:blur(8px); animation:promoDrift 9s ease-in-out infinite;
+  }
+  .promo-banner::after{
+    content:""; position:absolute; z-index:-1; width:240px; height:240px; border-radius:50%;
+    background:radial-gradient(circle, rgba(217,99,26,.28), transparent 70%);
+    bottom:-110px; right:-70px; filter:blur(8px); animation:promoDrift 11s ease-in-out infinite reverse;
+  }
+  @keyframes promoDrift{ 0%,100%{transform:translate(0,0);} 50%{transform:translate(20px,14px);} }
+  .promo-content{position:relative; z-index:1; max-width:520px;}
+  .promo-eyebrow{display:inline-flex; align-items:center; gap:8px; color:#D9631A; font-size:12px; font-weight:700; margin-bottom:12px;}
+  .promo-eyebrow .dot{width:6px; height:6px; border-radius:50%; background:#D9631A; animation:promoPulse 1.6s infinite;}
+  @keyframes promoPulse{0%,100%{opacity:1;} 50%{opacity:.3;}}
+  .promo-content h2{color:#FAFAF8; font-size:19px; font-weight:800; line-height:1.6; margin-bottom:10px;}
+  .promo-content h2 span{color:#D9631A;}
+  .promo-content p{color:rgba(250,250,248,.62); font-size:13.5px; line-height:1.8; margin-bottom:20px; max-width:44ch;}
+  .promo-cta{
+    display:inline-flex; align-items:center; gap:8px; background:#D9631A; color:#161513;
+    font-weight:700; font-size:13px; padding:10px 20px; border-radius:999px;
+    transition:gap .25s ease, background .25s ease;
+  }
+  .promo-banner:hover .promo-cta{ gap:13px; background:#F2823F; }
+  .promo-cta svg{ transition:transform .25s ease; }
+  .promo-banner:hover .promo-cta svg{ transform:translateX(-3px); }
+  .promo-visual{position:relative; z-index:1; flex-shrink:0; width:110px; height:110px; display:flex; align-items:center; justify-content:center;}
+  .promo-ring{position:absolute; border-radius:50%; border:1.3px solid rgba(217,99,26,.4);}
+  .promo-ring.pr1{width:110px; height:110px; animation:promoSpin 18s linear infinite;}
+  .promo-ring.pr2{width:80px; height:80px; border-color:rgba(217,99,26,.6); animation:promoSpin 14s linear infinite reverse;}
+  .promo-ring.pr3{width:52px; height:52px; border-color:rgba(217,99,26,.85); animation:promoSpin 10s linear infinite;}
+  @keyframes promoSpin{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
+  .promo-ring::before{content:""; position:absolute; width:6px; height:6px; border-radius:50%; background:#D9631A; top:-3px; right:calc(50% - 3px); box-shadow:0 0 10px 2px rgba(217,99,26,.7);}
+  .promo-core{position:relative; z-index:2; width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #F2823F, #B84E10); box-shadow:0 0 22px 4px rgba(217,99,26,.5);}
+  @media(max-width:640px){
+    .promo-banner{flex-direction:column-reverse; text-align:center; padding:26px 22px;}
+    .promo-content{max-width:100%;}
+    .promo-content p{max-width:100%;}
+  }
 </style>
 <script type="application/ld+json">
 {
@@ -164,6 +214,26 @@
     </div>
   </div>
 </section>
+
+<div class="wrap">
+<a class="promo-banner" href="https://parvizrahayan.github.io/paradigm-amoozesh/">
+  <div class="promo-content">
+    <div class="promo-eyebrow"><span class="dot"></span> بخش تازه‌ی اکوسیستم</div>
+    <h2>وقتی <span>هوش مصنوعی</span> پای تخته می‌آید</h2>
+    <p>سه مسیر مستقل برای آموزش: معلم خصوصیِ همیشه‌حاضر، کشف الگوی دبیرهای ترند، و توانمندسازی خود معلم.</p>
+    <span class="promo-cta">
+      ورود به پارادایم آموزش
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </div>
+  <div class="promo-visual">
+    <div class="promo-ring pr1"></div>
+    <div class="promo-ring pr2"></div>
+    <div class="promo-ring pr3"></div>
+    <div class="promo-core"></div>
+  </div>
+</a>
+</div>
 
 <section class="panel active" id="panel-own">
   <div class="wrap" id="ownWrap">

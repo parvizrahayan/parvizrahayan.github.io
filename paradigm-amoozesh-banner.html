@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بنر پارادایم آموزش</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Vazirmatn', sans-serif;
+    background:#FAFAF8;
+    padding:6vh 6vw;
+    display:flex; justify-content:center;
+  }
+
+  .banner{
+    position:relative;
+    max-width:960px; width:100%;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:32px;
+    background:#161513;
+    border-radius:20px;
+    padding:44px 52px;
+    overflow:hidden;
+    text-decoration:none;
+    isolation:isolate;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.4);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+  }
+  .banner:hover{
+    transform:translateY(-4px) scale(1.01);
+    box-shadow:0 28px 60px -18px rgba(217,99,26,.35);
+  }
+
+  /* glow blobs */
+  .banner::before{
+    content:""; position:absolute; z-index:-1;
+    width:420px; height:420px; border-radius:50%;
+    background:radial-gradient(circle, rgba(217,99,26,.55), transparent 70%);
+    top:-160px; left:-120px;
+    filter:blur(10px);
+    animation:drift 9s ease-in-out infinite;
+  }
+  .banner::after{
+    content:""; position:absolute; z-index:-1;
+    width:300px; height:300px; border-radius:50%;
+    background:radial-gradient(circle, rgba(217,99,26,.3), transparent 70%);
+    bottom:-140px; right:-80px;
+    filter:blur(10px);
+    animation:drift 11s ease-in-out infinite reverse;
+  }
+  @keyframes drift{
+    0%,100%{transform:translate(0,0);}
+    50%{transform:translate(24px,18px);}
+  }
+
+  /* chalk grain overlay */
+  .grain{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:4px 4px;
+    opacity:.5;
+  }
+
+  .content{position:relative; z-index:1; max-width:600px;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    color:#D9631A; font-size:.82rem; font-weight:700;
+    letter-spacing:.3px; margin-bottom:16px;
+  }
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:#D9631A; animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.3;}}
+
+  .content h1{
+    color:#FAFAF8; font-size:clamp(1.5rem,3vw,2.1rem); font-weight:900;
+    line-height:1.5; margin-bottom:14px;
+  }
+  .content h1 span{color:#D9631A;}
+  .content p{
+    color:rgba(250,250,248,.65); font-size:1rem; line-height:1.85; margin-bottom:26px;
+    max-width:50ch;
+  }
+
+  .cta{
+    display:inline-flex; align-items:center; gap:10px;
+    background:#D9631A; color:#161513; font-weight:700; font-size:.95rem;
+    padding:13px 26px; border-radius:999px;
+    transition:gap .3s ease, background .3s ease;
+  }
+  .banner:hover .cta{gap:16px; background:#F2823F;}
+  .cta .arrow{transition:transform .3s ease;}
+  .banner:hover .cta .arrow{transform:translateX(-4px);}
+
+  /* right-side visual: three orbiting rings representing the trilogy */
+  .visual{
+    position:relative; z-index:1; flex-shrink:0;
+    width:170px; height:170px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .ring{
+    position:absolute; border-radius:50%; border:1.5px solid rgba(217,99,26,.4);
+  }
+  .ring.r1{width:170px; height:170px; animation:spin 18s linear infinite;}
+  .ring.r2{width:126px; height:126px; border-color:rgba(217,99,26,.6); animation:spin 14s linear infinite reverse;}
+  .ring.r3{width:82px; height:82px; border-color:rgba(217,99,26,.85); animation:spin 10s linear infinite;}
+  @keyframes spin{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
+  .ring::before{
+    content:""; position:absolute; width:8px; height:8px; border-radius:50%;
+    background:#D9631A; top:-4px; right:calc(50% - 4px);
+    box-shadow:0 0 12px 2px rgba(217,99,26,.7);
+  }
+  .core{
+    position:relative; z-index:2;
+    width:52px; height:52px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #F2823F, #B84E10);
+    box-shadow:0 0 30px 6px rgba(217,99,26,.5);
+  }
+
+  @media(max-width:680px){
+    .banner{flex-direction:column-reverse; text-align:center; padding:34px 28px;}
+    .content{max-width:100%;}
+    .content p{max-width:100%;}
+    .visual{width:120px; height:120px;}
+    .ring.r1{width:120px; height:120px;}
+    .ring.r2{width:88px; height:88px;}
+    .ring.r3{width:56px; height:56px;}
+  }
+</style>
+</head>
+<body>
+
+<a class="banner" href="https://parvizrahayan.github.io/paradigm-amoozesh/">
+  <div class="grain"></div>
+  <div class="content">
+    <div class="eyebrow"><span class="dot"></span> بخش تازه‌ی اکوسیستم</div>
+    <h1>وقتی <span>هوش مصنوعی</span> پای تخته می‌آید</h1>
+    <p>سه مسیر مستقل برای آموزش: معلم خصوصیِ همیشه‌حاضر، کشف الگوی دبیرهای ترند، و توانمندسازی خود معلم.</p>
+    <span class="cta">
+      ورود به پارادایم آموزش
+      <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </div>
+  <div class="visual">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+    <div class="core"></div>
+  </div>
+</a>
+
+</body>
+</html>
