@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پرویز معین</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<meta name="description" content="پروژه‌هایی که می‌سازم، پروژه‌هایی که دوستان می‌سازند، و جایی برای غرفه‌داری.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="پرویز معین">
+<meta property="og:description" content="من میزبان شما هستم، شما هم میهمان من هستید — پروژه‌ها، دوستان، و یک پاساژ برای غرفه‌داری.">
+<meta property="og:image" content="https://parvizrahayan.github.io/og-image.png">
+<meta property="og:url" content="https://parvizrahayan.github.io/">
+<meta property="og:locale" content="fa_IR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="پرویز معین">
+<meta name="twitter:description" content="من میزبان شما هستم، شما هم میهمان من هستید.">
+<meta name="twitter:image" content="https://parvizrahayan.github.io/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A4A4A; --ink-faint:#8A8A8A;
+    --paper:#FFFFFF; --paper-2:#FAFAF7;
+    --marker:#111111;
+    --highlight:#FFE066; --highlight-soft:#FFF4C2;
+    --line:#D8D5CC;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--paper); color:var(--ink); font-family:'Vazirmatn',sans-serif; line-height:1.85; -webkit-font-smoothing:antialiased;}
+  .mono{font-family:'JetBrains Mono',monospace; direction:ltr;}
+  .wrap{max-width:780px; margin:0 auto; padding:0 24px;}
+
+  header{padding:56px 0 20px;}
+  h1{font-size:30px; font-weight:800; color:var(--ink);}
+  p.sub{color:var(--ink-soft); font-size:15px; margin-top:12px; max-width:520px;}
+
+  nav.tabs{display:flex; gap:0; margin-top:32px; border-bottom:2px solid var(--ink);}
+  .tab{
+    padding:12px 4px; margin-left:26px; font-size:15px; color:var(--ink-faint); cursor:pointer;
+    position:relative; font-weight:700; transition:color .15s ease;
+  }
+  .tab.active{color:var(--ink);}
+  .tab-underline{position:absolute; bottom:-2px; right:0; pointer-events:none;}
+
+  section.panel{display:none; padding:32px 0 70px;}
+  section.panel.active{display:block;}
+
+  .proj{
+    display:flex; flex-direction:column; border:2px solid var(--ink); border-radius:10px;
+    background:var(--paper); margin-bottom:16px; overflow:hidden;
+  }
+  .proj:nth-child(odd){ transform:rotate(-0.4deg); }
+  .proj:nth-child(even){ transform:rotate(0.35deg); }
+  .proj-top{display:flex; justify-content:space-between; align-items:center; gap:16px; text-decoration:none; color:inherit; padding:20px 22px;}
+  .proj-name{font-size:16px; font-weight:700; color:var(--ink);}
+  .proj-desc{font-size:13.5px; color:var(--ink-soft); margin-top:5px;}
+  .proj-date{font-size:11px; color:var(--ink-faint); flex:none;}
+  .proj-actions{display:flex; gap:8px; padding:0 22px 16px; border-top:1px dashed var(--line); margin-top:2px; padding-top:12px;}
+  .act-btn{
+    display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink);
+    background:var(--paper); border:1.5px solid var(--ink); border-radius:6px; padding:7px 11px;
+    cursor:pointer; font-family:'Vazirmatn',sans-serif; transition:background .12s ease;
+  }
+  .act-btn:hover{background:var(--highlight);}
+  .act-btn svg{width:13px; height:13px; flex:none;}
+
+  .empty, .loading, .error{color:var(--ink-soft); font-size:14px; padding:16px 0;}
+
+  .cta-box{
+    margin-top:22px; padding:20px 22px; border:2px dashed var(--ink); border-radius:12px;
+    display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .cta-box p{font-size:14px; color:var(--ink-soft);}
+  .cta-btn{
+    background:var(--highlight); color:var(--ink); border:2px solid var(--ink); padding:10px 22px; border-radius:8px;
+    font-weight:700; font-size:14px; text-decoration:none; white-space:nowrap;
+  }
+
+  .cat-chips{display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;}
+  .cat-chip{
+    font-size:12.5px; padding:6px 14px; border-radius:20px; border:1.5px solid var(--ink);
+    color:var(--ink); background:var(--paper);
+  }
+  .cat-chip.on{background:var(--highlight);}
+  .cat-chip.soon{opacity:.45; border-style:dashed;}
+
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#fff; font-size:13.5px; font-weight:600;
+    padding:10px 20px; border-radius:8px; opacity:0; pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease; z-index:100;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  footer{padding:36px 0 54px; text-align:center;}
+  footer p{font-size:12.5px; color:var(--ink-faint);}
+  .dedication{font-size:13.5px; color:var(--ink); margin-top:10px; font-weight:700;}
+
+  /* ---------- HOSPITALITY TABLE (whiteboard sketch) ---------- */
+  section.hostess{padding:14px 0 44px;}
+  .hostess-card{ text-align:center; padding:20px 8px 8px; position:relative; }
+  .hostess-title{font-size:22px; font-weight:800; color:var(--ink); position:relative; display:inline-block;}
+  .hostess-sub{font-size:13.5px; color:var(--ink-soft); margin-top:14px;}
+
+  .tray-wrap{ position:relative; width:360px; height:360px; margin:20px auto 0; }
+  .tray-wrap canvas{ position:absolute; inset:0; width:100%; height:100%; }
+  .cup-slot{ position:absolute; top:50%; left:50%; width:0; height:0; }
+  .cup-inner{
+    position:absolute; display:flex; flex-direction:column; align-items:center; gap:2px;
+    text-decoration:none; width:80px; height:80px; justify-content:center;
+  }
+  .cup-name{font-size:11.5px; color:var(--ink); font-weight:700; background:var(--paper); padding:1px 6px; border-radius:4px;}
+  .cup-slot:hover .cup-name{background:var(--highlight);}
+
+  @media (max-width:480px){ .tray-wrap{width:290px; height:290px;} }
+
+  /* ---------- PROMO BANNER: پارادایم آموزش ---------- */
+  .promo-banner{
+    position:relative; display:flex; align-items:center; justify-content:space-between;
+    gap:28px; background:#161513; border-radius:16px; padding:32px 34px;
+    overflow:hidden; text-decoration:none; isolation:isolate;
+    box-shadow:0 16px 40px -18px rgba(0,0,0,.35);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;
+    margin:0 0 40px;
+  }
+  .promo-banner:hover{ transform:translateY(-3px); box-shadow:0 22px 48px -16px rgba(217,99,26,.35); }
+  .promo-banner::before{
+    content:""; position:absolute; z-index:-1; width:340px; height:340px; border-radius:50%;
+    background:radial-gradient(circle, rgba(217,99,26,.5), transparent 70%);
+    top:-140px; left:-100px; filter:blur(8px); animation:promoDrift 9s ease-in-out infinite;
+  }
+  .promo-banner::after{
+    content:""; position:absolute; z-index:-1; width:240px; height:240px; border-radius:50%;
+    background:radial-gradient(circle, rgba(217,99,26,.28), transparent 70%);
+    bottom:-110px; right:-70px; filter:blur(8px); animation:promoDrift 11s ease-in-out infinite reverse;
+  }
+  @keyframes promoDrift{ 0%,100%{transform:translate(0,0);} 50%{transform:translate(20px,14px);} }
+  .promo-content{position:relative; z-index:1; max-width:520px;}
+  .promo-eyebrow{display:inline-flex; align-items:center; gap:8px; color:#D9631A; font-size:12px; font-weight:700; margin-bottom:12px;}
+  .promo-eyebrow .dot{width:6px; height:6px; border-radius:50%; background:#D9631A; animation:promoPulse 1.6s infinite;}
+  @keyframes promoPulse{0%,100%{opacity:1;} 50%{opacity:.3;}}
+  .promo-content h2{color:#FAFAF8; font-size:19px; font-weight:800; line-height:1.6; margin-bottom:10px;}
+  .promo-content h2 span{color:#D9631A;}
+  .promo-content p{color:rgba(250,250,248,.62); font-size:13.5px; line-height:1.8; margin-bottom:20px; max-width:44ch;}
+  .promo-cta{
+    display:inline-flex; align-items:center; gap:8px; background:#D9631A; color:#161513;
+    font-weight:700; font-size:13px; padding:10px 20px; border-radius:999px;
+    transition:gap .25s ease, background .25s ease;
+  }
+  .promo-banner:hover .promo-cta{ gap:13px; background:#F2823F; }
+  .promo-cta svg{ transition:transform .25s ease; }
+  .promo-banner:hover .promo-cta svg{ transform:translateX(-3px); }
+  .promo-visual{position:relative; z-index:1; flex-shrink:0; width:110px; height:110px; display:flex; align-items:center; justify-content:center;}
+  .promo-ring{position:absolute; border-radius:50%; border:1.3px solid rgba(217,99,26,.4);}
+  .promo-ring.pr1{width:110px; height:110px; animation:promoSpin 18s linear infinite;}
+  .promo-ring.pr2{width:80px; height:80px; border-color:rgba(217,99,26,.6); animation:promoSpin 14s linear infinite reverse;}
+  .promo-ring.pr3{width:52px; height:52px; border-color:rgba(217,99,26,.85); animation:promoSpin 10s linear infinite;}
+  @keyframes promoSpin{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
+  .promo-ring::before{content:""; position:absolute; width:6px; height:6px; border-radius:50%; background:#D9631A; top:-3px; right:calc(50% - 3px); box-shadow:0 0 10px 2px rgba(217,99,26,.7);}
+  .promo-core{position:relative; z-index:2; width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #F2823F, #B84E10); box-shadow:0 0 22px 4px rgba(217,99,26,.5);}
+  @media(max-width:640px){
+    .promo-banner{flex-direction:column-reverse; text-align:center; padding:26px 22px;}
+    .promo-content{max-width:100%;}
+    .promo-content p{max-width:100%;}
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "پرویز معین",
+    "url": "https://parvizrahayan.github.io/",
+    "sameAs": ["https://t.me/Sirparviz"]
+  },
+  "@id": "https://parvizrahayan.github.io/#profile",
+  "name": "پرویز معین",
+  "url": "https://parvizrahayan.github.io/",
+  "description": "پروژه‌هایی که می‌سازم، پروژه‌هایی که دوستان می‌سازند، و جایی برای غرفه‌داری.",
+  "inLanguage": "fa",
+  "isPartOf": {"@type": "WebSite", "name": "پرویز معین", "url": "https://parvizrahayan.github.io/"}
+}
+</script>
+<meta name="google-site-verification" content="PQJYrHqZk7kARH-1BmWMf_aXmSkKakqRo8XEk3cMVeI" />
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>پرویز معین</h1>
+    <p class="sub">پروژه‌هایی که می‌سازم، پروژه‌هایی که دوستان می‌سازند، و جایی برای غرفه‌داری.</p>
+
+    <nav class="tabs">
+      <div class="tab active" data-tab="own">اختصاصی</div>
+      <div class="tab" data-tab="guest">میهمان</div>
+      <div class="tab" data-tab="bazaar">پاساژ</div>
+    </nav>
+  </div>
+</header>
+
+<section class="hostess">
+  <div class="wrap">
+    <div class="hostess-card">
+      <div class="hostess-title" id="hostessTitle">من میزبان شما هستم، شما هم میهمان من هستید</div>
+      <div class="hostess-sub">یک فنجان بردار — هرکدام را که خواستی انتخاب کن و همان‌جا گپ بزن</div>
+      <div class="tray-wrap" id="trayWrap">
+        <canvas id="trayCanvas"></canvas>
+        <!-- cups placed via JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+<a class="promo-banner" href="https://parvizrahayan.github.io/paradigm-amoozesh/">
+  <div class="promo-content">
+    <div class="promo-eyebrow"><span class="dot"></span> بخش تازه‌ی اکوسیستم</div>
+    <h2>وقتی <span>هوش مصنوعی</span> پای تخته می‌آید</h2>
+    <p>سه مسیر مستقل برای آموزش: معلم خصوصیِ همیشه‌حاضر، کشف الگوی دبیرهای ترند، و توانمندسازی خود معلم.</p>
+    <span class="promo-cta">
+      ورود به پارادایم آموزش
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </div>
+  <div class="promo-visual">
+    <div class="promo-ring pr1"></div>
+    <div class="promo-ring pr2"></div>
+    <div class="promo-ring pr3"></div>
+    <div class="promo-core"></div>
+  </div>
+</a>
+</div>
+
+<section class="panel active" id="panel-own">
+  <div class="wrap" id="ownWrap">
+    <div class="loading">در حال بارگذاری…</div>
+  </div>
+</section>
+
+<section class="panel" id="panel-guest">
+  <div class="wrap">
+    <div id="guestWrap"><div class="loading">در حال بارگذاری…</div></div>
+    <div class="cta-box">
+      <p>پروژه‌ای ساخته‌ای که دوست داری اینجا باشد؟</p>
+      <a class="cta-btn" id="guestCta" href="#" target="_blank" rel="noopener">پیشنهاد بده</a>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="panel-bazaar">
+  <div class="wrap">
+    <div class="cat-chips">
+      <div class="cat-chip on">دیجیتال</div>
+      <div class="cat-chip soon">خدمات · به‌زودی</div>
+      <div class="cat-chip soon">دست‌ساز · به‌زودی</div>
+    </div>
+    <div id="bazaarWrap"><div class="loading">در حال بارگذاری…</div></div>
+    <div class="cta-box">
+      <p>می‌خوای یک غرفه داشته باشی؟</p>
+      <a class="cta-btn" id="bazaarCta" href="#" target="_blank" rel="noopener">پیشنهاد غرفه</a>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast">لینک کپی شد!</div>
+
+<footer>
+  <div class="wrap">
+    <p>ساخته‌شده برای امتحان ایده‌های جدید.</p>
+    <p class="dedication">ارادتمند، پرویز معین</p>
+  </div>
+</footer>
+
+<script>
+const GITHUB_USER = 'parvizrahayan';
+const TELEGRAM_USER = 'Sirparviz';
+
+// ---------- Tabs ----------
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ---------- Helpers ----------
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1800);
+}
+function telegramLink(text){
+  return 'https://t.me/' + TELEGRAM_USER + '?text=' + encodeURIComponent(text);
+}
+
+function projCard(name, desc, url, dateStr, caption){
+  const card = document.createElement('div');
+  card.className = 'proj';
+  card.innerHTML = `
+    <a href="${url}" target="_blank" rel="noopener" class="proj-top">
+      <div>
+        <div class="proj-name">${escapeHtml(name)}</div>
+        <div class="proj-desc">${escapeHtml(desc)}</div>
+      </div>
+      <div class="proj-date mono">${dateStr}</div>
+    </a>
+    <div class="proj-actions">
+      <button class="act-btn" data-action="copy" data-url="${url}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        کپی لینک
+      </button>
+      <button class="act-btn" data-action="telegram" data-url="${url}" data-caption="${escapeHtml(caption)}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg>
+        تلگرام
+      </button>
+      <button class="act-btn" data-action="share" data-url="${url}" data-caption="${escapeHtml(caption)}" data-title="${escapeHtml(name)}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/></svg>
+        اشتراک‌گذاری
+      </button>
+    </div>
+  `;
+  return card;
+}
+
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.act-btn');
+  if(!btn) return;
+  const action = btn.dataset.action;
+  const url = btn.dataset.url;
+
+  if(action === 'copy'){
+    try{ await navigator.clipboard.writeText(url); showToast('لینک کپی شد!'); }
+    catch(err){ showToast('کپی نشد — لینک را دستی انتخاب کن.'); }
+  }
+  if(action === 'telegram'){
+    window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(btn.dataset.caption), '_blank');
+  }
+  if(action === 'share'){
+    const caption = btn.dataset.caption, title = btn.dataset.title;
+    if(navigator.share){
+      try{ await navigator.share({ title, text: caption, url }); }catch(err){}
+    }else{
+      try{ await navigator.clipboard.writeText(caption); showToast('کپشن کپی شد.'); }
+      catch(err){ showToast('اشتراک‌گذاری پشتیبانی نمی‌شود.'); }
+    }
+  }
+});
+
+// ---------- اختصاصی: auto from GitHub API ----------
+async function loadOwn(){
+  const wrap = document.getElementById('ownWrap');
+  try{
+    const res = await fetch('https://api.github.com/users/' + GITHUB_USER + '/repos?sort=created&direction=desc&per_page=100');
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const repos = await res.json();
+    const projects = repos.filter(r => r.has_pages && r.name !== (GITHUB_USER + '.github.io'));
+
+    if(!projects.length){ wrap.innerHTML = '<div class="empty">هنوز پروژه‌ای منتشر نشده.</div>'; return; }
+
+    wrap.innerHTML = '';
+    projects.forEach(p => {
+      const url = 'https://' + GITHUB_USER + '.github.io/' + p.name + '/';
+      const date = new Date(p.created_at).toISOString().slice(0,10);
+      const desc = p.description || 'یک پروژه‌ی جدید برای امتحان کردن';
+      const caption = 'پرویز معین این رو به تو، دوست عزیزم، تقدیم می‌کنه 🎁\n\n' + p.name + '\n' + desc + '\n\n' + url;
+      wrap.appendChild(projCard(p.name, desc, url, date, caption));
+    });
+  }catch(err){
+    console.error(err);
+    wrap.innerHTML = '<div class="error">بارگذاری با خطا مواجه شد. چند لحظه دیگر رفرش کن.</div>';
+  }
+}
+
+// ---------- میهمان: از guests.json ----------
+async function loadGuests(){
+  const wrap = document.getElementById('guestWrap');
+  document.getElementById('guestCta').href = telegramLink('سلام پرویز، یک پروژه دارم که دوست دارم توی بخش میهمان سایتت بذاری:');
+  try{
+    const res = await fetch('guests.json?_=' + Date.now());
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const guests = await res.json();
+    if(!guests.length){ wrap.innerHTML = '<div class="empty">هنوز کسی میهمان نشده — اولین نفر باش.</div>'; return; }
+
+    wrap.innerHTML = '';
+    guests.forEach(g => {
+      const caption = 'پرویز معین این رو به تو، دوست عزیزم، تقدیم می‌کنه 🎁\n\n' + g.name + ' — ساخته‌ی ' + (g.owner || '') + '\n' + (g.description || '') + '\n\n' + g.url;
+      wrap.appendChild(projCard(g.name, (g.owner ? g.owner + ' — ' : '') + (g.description || ''), g.url, g.date || '', caption));
+    });
+  }catch(err){
+    wrap.innerHTML = '<div class="empty">هنوز کسی میهمان نشده — اولین نفر باش.</div>';
+  }
+}
+
+// ---------- پاساژ: از booths.json ----------
+async function loadBazaar(){
+  const wrap = document.getElementById('bazaarWrap');
+  document.getElementById('bazaarCta').href = telegramLink('سلام پرویز، می‌خوام توی پاساژ یک غرفه داشته باشم:');
+  try{
+    const res = await fetch('booths.json?_=' + Date.now());
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const booths = await res.json();
+    if(!booths.length){ wrap.innerHTML = '<div class="empty">اولین غرفه‌ها به‌زودی — بخواه یکی برای خودت.</div>'; return; }
+
+    wrap.innerHTML = '';
+    booths.forEach(b => {
+      const caption = 'یک غرفه توی پاساژ پرویز معین 🎁\n\n' + b.name + ' — ' + (b.owner || '') + '\n' + (b.description || '') + '\n\n' + b.url;
+      wrap.appendChild(projCard(b.name, (b.owner ? b.owner + ' — ' : '') + (b.description || ''), b.url, '', caption));
+    });
+  }catch(err){
+    wrap.innerHTML = '<div class="empty">اولین غرفه‌ها به‌زودی — بخواه یکی برای خودت.</div>';
+  }
+}
+
+loadOwn();
+loadGuests();
+loadBazaar();
+
+// ---------- میز پذیرایی: طرح دست‌کشیده (بدون هیچ کتابخانه‌ی بیرونی) ----------
+const AI_CUPS = [
+  { name:'ChatGPT',    url:'https://chat.openai.com' },
+  { name:'Claude',     url:'https://claude.ai' },
+  { name:'Gemini',     url:'https://gemini.google.com' },
+  { name:'Grok',       url:'https://grok.com' },
+  { name:'DeepSeek',   url:'https://chat.deepseek.com' },
+  { name:'Perplexity', url:'https://www.perplexity.ai' },
+  { name:'Copilot',    url:'https://copilot.microsoft.com' },
+  { name:'Le Chat',    url:'https://chat.mistral.ai' },
+  { name:'Meta AI',    url:'https://www.meta.ai' }
+];
+
+// یک دایره‌ی کمی نامنظم رسم می‌کند، انگار با ماژیک دست آزاد کشیده شده — دو بار روی هم، هر بار با لرزش متفاوت.
+function sketchCircle(ctx, cx, cy, r, passes){
+  passes = passes || 2;
+  for(let p=0; p<passes; p++){
+    ctx.beginPath();
+    const steps = 40;
+    const wobble = r * 0.035;
+    const startAngle = Math.random() * Math.PI * 2;
+    for(let i=0; i<=steps; i++){
+      const a = startAngle + (i/steps) * Math.PI * 2;
+      const jitter = (Math.sin(i * 2.7 + p * 5) + (Math.random()-0.5)) * wobble;
+      const rr = r + jitter;
+      const x = cx + rr * Math.cos(a);
+      const y = cy + rr * Math.sin(a);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+}
+
+// خط شکسته‌ی کوچک (برای بخار)
+function sketchLine(ctx, x1, y1, x2, y2){
+  ctx.beginPath();
+  const midx = (x1+x2)/2 + (Math.random()-0.5)*4;
+  const midy = (y1+y2)/2 + (Math.random()-0.5)*4;
+  ctx.moveTo(x1,y1);
+  ctx.quadraticCurveTo(midx, midy, x2, y2);
+  ctx.stroke();
+}
+
+function drawTray(){
+  const wrapEl = document.getElementById('trayWrap');
+  const canvas = document.getElementById('trayCanvas');
+  const size = wrapEl.offsetWidth || 360;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.strokeStyle = '#111';
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  const cx = size/2, cy = size/2;
+  const ringR = size * 0.42;
+  const cupR = size < 320 ? 22 : 26;
+  const orbitR = size * 0.42;
+
+  // سینی بیرونی
+  sketchCircle(ctx, cx, cy, ringR, 2);
+
+  // بلوب مرکزی (پرمانند)
+  ctx.fillStyle = '#111';
+  ctx.save();
+  ctx.globalAlpha = 0.9;
+  sketchCircle(ctx, cx, cy, size < 320 ? 40 : 50, 2);
+  ctx.beginPath();
+  ctx.arc(cx, cy, (size < 320 ? 34 : 42), 0, Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+
+  const n = AI_CUPS.length;
+  const positions = [];
+  for(let i=0;i<n;i++){
+    const angle = (-90 + (360/n)*i) * Math.PI/180;
+    const x = cx + orbitR * Math.cos(angle);
+    const y = cy + orbitR * Math.sin(angle);
+    positions.push({x,y});
+    sketchCircle(ctx, x, y, cupR, 2);
+    sketchLine(ctx, x-6, y-cupR-2, x-2, y-cupR-16);
+    sketchLine(ctx, x+4, y-cupR-2, x+8, y-cupR-18);
+  }
+
+  return { positions };
+}
+
+function placeCupLabels(layout){
+  const wrapEl = document.getElementById('trayWrap');
+  wrapEl.querySelectorAll('.cup-slot').forEach(el => el.remove());
+  const size = wrapEl.offsetWidth;
+
+  AI_CUPS.forEach((ai, i) => {
+    const pos = layout.positions[i];
+    const slot = document.createElement('div');
+    slot.className = 'cup-slot';
+    const a = document.createElement('a');
+    a.href = ai.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.className = 'cup-inner';
+    a.style.left = (pos.x - size/2 - 40) + 'px';
+    a.style.top = (pos.y - size/2 - 40) + 'px';
+    a.innerHTML = `<div class="cup-name">${ai.name}</div>`;
+    slot.appendChild(a);
+    wrapEl.appendChild(slot);
+  });
+}
+
+function initTray(){
+  const layout = drawTray();
+  placeCupLabels(layout);
+}
+initTray();
+window.addEventListener('resize', () => { initTray(); });
+</script>
+
+</body>
+</html>
