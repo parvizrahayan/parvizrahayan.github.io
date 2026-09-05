@@ -374,7 +374,9 @@ async function loadOwn(){
       const url = p.homepage || ('https://' + GITHUB_USER + '.github.io/' + p.name + '/');
       const date = new Date(p.created_at).toISOString().slice(0,10);
       const desc = p.description || 'یک پروژه‌ی جدید برای امتحان کردن';
-      const caption = p.name + '\n' + desc;
+      let host = '';
+      try { host = new URL(url).hostname.replace(/^www\./, ''); } catch(e) {}
+      const caption = (p.name === host) ? desc : (p.name + '\n' + desc);
       wrap.appendChild(projCard(p.name, desc, url, date, caption));
     });
   }catch(err){
