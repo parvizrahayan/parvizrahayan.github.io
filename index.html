@@ -345,7 +345,7 @@ document.addEventListener('click', async (e) => {
     catch(err){ showToast('کپی نشد — لینک را دستی انتخاب کن.'); }
   }
   if(action === 'telegram'){
-    window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(btn.dataset.caption), '_blank');
+    window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(btn.dataset.caption), '_blank'); // caption دیگر شامل url نیست، پس تکراری نمی‌شود
   }
   if(action === 'share'){
     const caption = btn.dataset.caption, title = btn.dataset.title;
@@ -371,10 +371,10 @@ async function loadOwn(){
 
     wrap.innerHTML = '';
     projects.forEach(p => {
-      const url = 'https://' + GITHUB_USER + '.github.io/' + p.name + '/';
+      const url = p.homepage || ('https://' + GITHUB_USER + '.github.io/' + p.name + '/');
       const date = new Date(p.created_at).toISOString().slice(0,10);
       const desc = p.description || 'یک پروژه‌ی جدید برای امتحان کردن';
-      const caption = 'پرویز معین این رو به تو، دوست عزیزم، تقدیم می‌کنه 🎁\n\n' + p.name + '\n' + desc + '\n\n' + url;
+      const caption = p.name + '\n' + desc;
       wrap.appendChild(projCard(p.name, desc, url, date, caption));
     });
   }catch(err){
@@ -395,7 +395,7 @@ async function loadGuests(){
 
     wrap.innerHTML = '';
     guests.forEach(g => {
-      const caption = 'پرویز معین این رو به تو، دوست عزیزم، تقدیم می‌کنه 🎁\n\n' + g.name + ' — ساخته‌ی ' + (g.owner || '') + '\n' + (g.description || '') + '\n\n' + g.url;
+      const caption = g.name + (g.owner ? ' — ساخته‌ی ' + g.owner : '') + '\n' + (g.description || '');
       wrap.appendChild(projCard(g.name, (g.owner ? g.owner + ' — ' : '') + (g.description || ''), g.url, g.date || '', caption));
     });
   }catch(err){
@@ -415,7 +415,7 @@ async function loadBazaar(){
 
     wrap.innerHTML = '';
     booths.forEach(b => {
-      const caption = 'یک غرفه توی پاساژ پرویز معین 🎁\n\n' + b.name + ' — ' + (b.owner || '') + '\n' + (b.description || '') + '\n\n' + b.url;
+      const caption = b.name + (b.owner ? ' — ' + b.owner : '') + '\n' + (b.description || '');
       wrap.appendChild(projCard(b.name, (b.owner ? b.owner + ' — ' : '') + (b.description || ''), b.url, '', caption));
     });
   }catch(err){
